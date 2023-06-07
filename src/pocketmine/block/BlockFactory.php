@@ -82,15 +82,15 @@ class BlockFactory{
 	 * this if you need to reset the block factory back to its original defaults for whatever reason.
 	 */
 	public static function init() : void{
-		self::$fullList = new SplFixedArray(4096);
+		self::$fullList = new SplFixedArray(4096 << 4);
 
-		self::$light = new SplFixedArray(256);
-		self::$lightFilter = new SplFixedArray(256);
-		self::$solid = new SplFixedArray(256);
-		self::$hardness = new SplFixedArray(256);
-		self::$transparent = new SplFixedArray(256);
-		self::$diffusesSkyLight = new SplFixedArray(256);
-		self::$blastResistance = new SplFixedArray(256);
+		self::$light = new SplFixedArray(256 << 4);
+		self::$lightFilter = new SplFixedArray(256 << 4);
+		self::$solid = new SplFixedArray(256 << 4);
+		self::$hardness = new SplFixedArray(256 << 4);
+		self::$transparent = new SplFixedArray(256 << 4);
+		self::$diffusesSkyLight = new SplFixedArray(256 << 4);
+		self::$blastResistance = new SplFixedArray(256 << 4);
 
 		self::registerBlock(new Air());
 		self::registerBlock(new Stone());
@@ -342,12 +342,13 @@ class BlockFactory{
 		//TODO: STRUCTURE_BLOCK
 
 		self::registerBlock(new Reserved6(Block::RESERVED6, 0, "reserved6"));
+		self::registerBlock(new NetheriteBlock());
 
-		for($id = 0, $size = self::$fullList->getSize() >> 4; $id < $size; ++$id){
-			if(self::$fullList[$id << 4] === null){
-				self::registerBlock(new UnknownBlock($id));
-			}
-		}
+		// for($id = 0, $size = self::$fullList->getSize() >> 4; $id < $size; ++$id){
+		// 	if(self::$fullList[$id << 4] === null){
+		// 		self::registerBlock(new UnknownBlock($id));
+		// 	}
+		// }
 	}
 
 	public static function isInit() : bool{
@@ -398,7 +399,11 @@ class BlockFactory{
 
 		try{
 			if(self::$fullList !== null){
-				$block = clone self::$fullList[($id << 4) | $meta];
+				$block = self::$fullList[($id << 4) | $meta];
+				if (!is_object($block)) {
+					$block = new UnknownBlock($id, $meta);
+				}
+				$block = clone $block;
 			}else{
 				$block = new UnknownBlock($id, $meta);
 			}
@@ -428,7 +433,7 @@ class BlockFactory{
 	 * Returns whether a specified block ID is already registered in the block factory.
 	 */
 	public static function isRegistered(int $id) : bool{
-		$b = self::$fullList[$id << 4];
+		$b = self::$fullList[$id << 4] ?? null;
 		return $b !== null and !($b instanceof UnknownBlock);
 	}
 

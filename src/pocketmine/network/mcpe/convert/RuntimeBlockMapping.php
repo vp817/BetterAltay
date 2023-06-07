@@ -88,8 +88,25 @@ final class RuntimeBlockMapping{
 		 * @var int[][] $idToStatesMap string id -> int[] list of candidate state indices
 		 */
 		$idToStatesMap = [];
+		$oldStateName = null;
+		$stateMeta = 0;
 		foreach(self::$bedrockKnownStates as $k => $state){
-			$idToStatesMap[$state->getString("name")][] = $k;
+			$stateName = $state->getString("name");
+			$idToStatesMap[$stateName][] = $k;
+			if ($oldStateName !== $stateName) {
+				$stateMeta = 0;
+			}
+
+			$id = $legacyIdMap[$stateName] ?? null;
+
+			if ($id === null) {
+				$id = 255;
+			}
+
+			self::registerMapping($k, $id, $stateMeta);
+
+			++$stateMeta;
+			$oldStateName = $stateName;
 		}
 		foreach($legacyStateMap as $pair){
 			$id = $legacyIdMap[$pair->getId()] ?? null;

@@ -27,6 +27,8 @@ use pocketmine\block\BlockIds;
 
 interface ItemIds extends BlockIds{
 
+	public const NETHERITE_BLOCK = -270;
+
 	public const IRON_SHOVEL = 256;
 	public const IRON_PICKAXE = 257;
 	public const IRON_AXE = 258;

@@ -73,6 +73,7 @@ abstract class Tile extends Position{
 	public const NOTE_BLOCK = "NoteBlock";
 	public const JUKEBOX = "Jukebox";
 	public const SHULKER_BOX = "ShulkerBox";
+	public const VANILLA_BLOCK = "VanillaBlock";
 
 	/** @var int */
 	public static $tileCount = 1;
@@ -120,6 +121,7 @@ abstract class Tile extends Position{
 		self::registerTile(Hopper::class, [self::HOPPER, "minecraft:hopper"]);
 		self::registerTile(Beacon::class, [self::BEACON, "minecraft:beacon"]);
 		self::registerTile(Cauldron::class, [self::CAULDRON, "minecraft:cauldron"]);
+		self::registerTile(VanillaBlock::class, [self::VANILLA_BLOCK, "minecraft:vanilla_block"]);
 	}
 
 	/**

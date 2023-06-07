@@ -35,6 +35,7 @@ use pocketmine\block\Air;
 use pocketmine\block\Block;
 use pocketmine\block\BlockFactory;
 use pocketmine\block\Liquid;
+use pocketmine\block\VanillaBlock;
 use pocketmine\entity\CreatureType;
 use pocketmine\entity\Entity;
 use pocketmine\entity\object\ExperienceOrb;
@@ -899,6 +900,7 @@ class Level implements ChunkManager, Metadatable{
 			Level::getBlockXYZ($index, $x, $y, $z);
 
 			$block = $this->getBlockAt($x, $y, $z);
+			var_dump($block instanceof VanillaBlock);
 			$block->clearCaches(); //for blocks like fences, force recalculation of connected AABBs
 
 			$ev = new BlockUpdateEvent($block);
